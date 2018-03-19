@@ -1,6 +1,6 @@
 # CrytoPrimitive Python Weekend Hackathon
-* https://redd.it/83d3lz
-* https://cryptoprimitive.slack.com/messages
+*   https://redd.it/83d3lz
+*   https://cryptoprimitive.slack.com/messages
 
 ## Purpose
 Smart contracts should, in theory, make coordination easier.
@@ -44,12 +44,21 @@ pip install eth-utils==0.7.*
 py.test
 ```
 
-#### new chain via geth
+#### Deploy contract to a local chain (via geth)
+http://populus.readthedocs.io/en/latest/dev_cycle.part-06.html
 ```
 # install geth
 brew tap ethereum/ethereum
 brew install ethereum
 
+# init new chain and run
 populus chain new horton
 chains/horton/./init_chain.sh
+chains/horton/./run_chain.sh
+
+# deploy Donator contract to the new chain (--no-wait-for-sync to use dummy Ether to run the transaction immediately)
+populus deploy --chain horton Donator --no-wait-for-sync
+python3 scripts/donator.py
+
+populus deploy --chain horton Greeter --no-wait-for-sync
 ```
