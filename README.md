@@ -69,3 +69,10 @@ http://populus.readthedocs.io/en/latest/dev_cycle.part-07.html
 ```
 python3 scripts/donator.py
 ```
+
+#### Web3.py Console
+http://populus.readthedocs.io/en/latest/dev_cycle.part-08.html
+
+```
+solc --abi contracts/Donator.sol
+```
