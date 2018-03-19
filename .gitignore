@@ -1,3 +1,4 @@
 chains/
 .pytest_cache/
 __pycache__/
+registrar.json

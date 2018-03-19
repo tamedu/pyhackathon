@@ -56,9 +56,16 @@ populus chain new horton
 chains/horton/./init_chain.sh
 chains/horton/./run_chain.sh
 
-# deploy Donator contract to the new chain (--no-wait-for-sync to use dummy Ether to run the transaction immediately)
+# deploy contracts to the new chain (--no-wait-for-sync to use dummy Ether to run the transaction immediately)
 populus deploy --chain horton Donator --no-wait-for-sync
-python3 scripts/donator.py
-
 populus deploy --chain horton Greeter --no-wait-for-sync
+```
+
+#### Interacting With a Contract Instance
+http://populus.readthedocs.io/en/latest/dev_cycle.part-07.html
+
+> Populus does not ask you for the address and the ABI of the projects’ contracts: it already has the address in the registrar file at registrar.json, and the ABI in build/contracts.json
+
+```
+python3 scripts/donator.py
 ```
