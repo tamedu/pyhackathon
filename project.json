@@ -13,7 +13,7 @@
         "provider": {
           "class": "web3.providers.ipc.IPCProvider",
         "settings": {
-          "ipc_path":"/Users/alexnguyen/src/pyhackathon/chains/horton/chain_data/geth.ipc"
+          "ipc_path":"./chains/horton/chain_data/geth.ipc"
         }
        }
       },

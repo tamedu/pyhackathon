@@ -1,7 +1,7 @@
 from populus.project import Project
 import random
 
-p = Project(project_dir="/Users/alexnguyen/src/pyhackathon")
+p = Project(project_dir="./")
 with p.get_chain('horton') as chain:
     donator, deploy_tx_hash = chain.provider.get_or_deploy_contract('Donator')
 
