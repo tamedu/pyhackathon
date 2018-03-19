@@ -40,7 +40,7 @@ brew tap ethereum/ethereum && brew install solidity # http://solidity.readthedoc
 populus compile
 
 populus deploy --chain tester Donator
-pip install eth-utils==0.7.*
+pip install eth-utils==0.7.* # since py.test required eth-utils 0.7.* version
 py.test
 ```
 
