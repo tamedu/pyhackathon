@@ -19,7 +19,7 @@ After that, the focus of the hackathon will be on making interaction easier and 
 brew install python3
 pip3 install --upgrade pip
 pip install web3 --pre
-python3 burnable_payment.py
+python3 cli/burnable_payment.py
 ```
 
 ### Populus Development Cycle
