@@ -1,6 +1,6 @@
 # CrytoPrimitive Python Weekend Hackathon
 *   https://redd.it/83d3lz
-*   https://cryptoprimitive.slack.com/messages
+*   [CryptoPrimitive slack invite](https://cp-hackathon-invite.herokuapp.com/). Make sure to check out #weekend-hackathon!
 
 ## Purpose
 Smart contracts should, in theory, make coordination easier.
@@ -14,11 +14,11 @@ After that, the focus of the hackathon will be on making interaction easier and 
 
 ## Python Ethereum Development
 
-### web3py
+### web3py **beta** (4.x)
 ```
 brew install python3
 pip3 install --upgrade pip
-pip install web3
+pip install web3 --pre
 python3 burnable_payment.py
 ```
 
