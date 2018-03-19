@@ -75,4 +75,5 @@ http://populus.readthedocs.io/en/latest/dev_cycle.part-08.html
 
 ```
 solc --abi contracts/Donator.sol
+python3 cli/donator.py
 ```
