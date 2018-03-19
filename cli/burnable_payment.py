@@ -4,12 +4,20 @@ from web3 import Web3, HTTPProvider
 from web3.contract import ConciseContract
 
 # ropsten testnet
-w3 = Web3(HTTPProvider('https://ropsten.infura.io'))
-ADDRESS = "0xA981e23E9Ff17357dE2a13a9CA36E728322016f0"
+# w3 = Web3(HTTPProvider('https://ropsten.infura.io'))
+# ADDRESS = "0xA981e23E9Ff17357dE2a13a9CA36E728322016f0"
 
 # mainnet
-w3 = Web3(HTTPProvider('https://quiknode.io/node/8959339e-f0ab-4403-876f-1aed9422a44f/uP8DF_ZStmNAJ77urwDRKg=='))
+w3 = Web3(HTTPProvider('https://gladly-golden-parrot.quiknode.io/8959339e-f0ab-4403-876f-1aed9422a44f/xh9aJBYpYQHEhu6q8jQrkA==/'))
 ADDRESS = "0x38B394cD27C3b0D865F58a4512b65c7b0ab6DB66"
+''' IMPORTANT !!!
+Don't put a lot of money on it. Paying for very simple interfaces, some game-like.
+The current problem is you can only make calls (including withdrawing back to your own account)
+if you 'unlock' your account--and then I think
+anyone on the node has access to the funds/account until you 'lock' it again.
+Logan currently looking at handling private keys locally, but it's not necessarily going to be easy.
+'''
+
 
 # pilot info
 print("blockNumber:", w3.eth.blockNumber)

@@ -22,6 +22,15 @@ pip install web3 --pre
 python3 cli/burnable_payment.py
 ```
 
+#### IMPORTANT !!!
+cli/burnable_payment.py can be use with mainnet via quiknode a server. For the mainnet:
+> Don't put a lot of money on it. Paying for very simple interfaces, some game-like.
+> The current problem is you can only make calls (including withdrawing back to your own account)
+> if you 'unlock' your account--and then I think
+> anyone on the node has access to the funds/account until you 'lock' it again.
+> Logan currently looking at handling private keys locally, but it's not necessarily going to be easy.
+
+
 ### Populus Development Cycle
 https://populus.readthedocs.io/en/latest/dev_cycle.html
 
