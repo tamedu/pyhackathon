@@ -38,21 +38,37 @@ https://populus.readthedocs.io/en/latest/dev_cycle.html
 ### Part 1-5: Create, compile and test Solidity contracts
 
 ```
-brew install pkg-config libffi autoconf automake libtool openssl # to complie https://github.com/ludbb/secp256k1-py
+brew install python3
+pip3 install --upgrade pip
+pip install web3 --pre
+
+# Install following packages to complie https://github.com/ludbb/secp256k1-py
+# needed while installing populus
+brew install pkg-config libffi autoconf automake libtool openssl
+
+# Needed while finishing populus installation
 sudo touch /usr/local/LICENSE
-sudo chown "Alex Nguyen" /usr/local/LICENSE
+sudo chown "$(whoami)" /usr/local/LICENSE
 
 pip install populus
 # - OR -
 git clone https://github.com/ethereum/populus.git
+cd populus
 pip install -e . -r requirements-dev.txt
 
 populus init
-brew tap ethereum/ethereum && brew install solidity # http://solidity.readthedocs.io/en/develop/installing-solidity.html
+
+# Install solidiy (solc) to compile solidity souce code
+# http://solidity.readthedocs.io/en/develop/installing-solidity.html
+brew tap ethereum/ethereum
+brew install solidity
 populus compile
 
+# Test deploy, no need to run before py.test
 populus deploy --chain tester Donator
-pip install eth-utils==0.7.* # since py.test required eth-utils 0.7.* version
+
+# Unit-testing
+pip install eth-utils==0.7.* # py.test required eth-utils 0.7.* version
 py.test
 
 # test selected test file
