@@ -1,0 +1,22 @@
+script:
+    - pytest # or py.test for Python versions 3.5 and below
+install:
+    - pip install -r requirements.txt
+
+language: python # https://docs.travis-ci.com/user/languages/python/
+python:
+    - 3.6
+
+sudo: true
+before_install: # http://populus.readthedocs.io/en/latest/quickstart.html#system-dependencies
+    - sudo add-apt-repository ppa:ethereum/ethereum -y
+    - sudo apt-get update -q
+    - sudo apt-get install libssl-dev solc ethereum -y
+
+# os: osx # https://docs.travis-ci.com/user/reference/osx/
+# before_install: # https://docs.travis-ci.com/user/installing-dependencies/#Installing-Packages-on-OS-X
+#     - brew install pkg-config libffi autoconf automake libtool openssl
+#     - brew upgrade python
+#     - pip3 install --upgrade pip
+#     - brew tap ethereum/ethereum
+#     - brew install solidity

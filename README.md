@@ -1,3 +1,4 @@
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/tamedu/pyhackathon.png?columns=all)](https://waffle.io/tamedu/pyhackathon?utm_source=badge)
 # CrytoPrimitive Python Weekend Hackathon
 *   https://redd.it/83d3lz
 *   [CryptoPrimitive slack invite](https://cp-hackathon-invite.herokuapp.com/). Make sure to check out #weekend-hackathon!
@@ -19,11 +20,21 @@ After that, the focus of the hackathon will be on making interaction easier and 
 brew install python3
 pip3 install --upgrade pip
 pip install web3 --pre
-python3 burnable_payment.py
+python3 cli/burnable_payment.py
 ```
+
+#### IMPORTANT !!!
+cli/burnable_payment.py can be use with mainnet via quiknode a server. For the mainnet:
+> Don't put a lot of money on it. Paying for very simple interfaces, some game-like.
+> The current problem is you can only make calls (including withdrawing back to your own account)
+> if you 'unlock' your account--and then I think
+> anyone on the node has access to the funds/account until you 'lock' it again.
+> Logan currently looking at handling private keys locally, but it's not necessarily going to be easy.
+
 
 ### Populus Development Cycle
 https://populus.readthedocs.io/en/latest/dev_cycle.html
+### Part 1-5: Create, compile and test Solidity contracts
 
 ```
 brew install pkg-config libffi autoconf automake libtool openssl # to complie https://github.com/ludbb/secp256k1-py
@@ -42,9 +53,14 @@ populus compile
 populus deploy --chain tester Donator
 pip install eth-utils==0.7.* # since py.test required eth-utils 0.7.* version
 py.test
+
+populus deploy --chain tester ProjectOwnership
+py.test tests/test_project_ownership.py # to test selected test-cases
 ```
 
-#### Deploy contract to a local chain (via geth)
+More about solidity contract testing using populus at http://populus.readthedocs.io/en/latest/testing.html#web3
+
+#### Part 6: Deploy contract to a local chain (via geth)
 http://populus.readthedocs.io/en/latest/dev_cycle.part-06.html
 ```
 # install geth
@@ -61,7 +77,7 @@ populus deploy --chain horton Donator --no-wait-for-sync
 populus deploy --chain horton Greeter --no-wait-for-sync
 ```
 
-#### Interacting With a Contract Instance
+#### Part 7: Interacting With a Contract Instance
 http://populus.readthedocs.io/en/latest/dev_cycle.part-07.html
 
 > Populus does not ask you for the address and the ABI of the projects’ contracts: it already has the address in the registrar file at registrar.json, and the ABI in build/contracts.json
@@ -70,9 +86,10 @@ http://populus.readthedocs.io/en/latest/dev_cycle.part-07.html
 python3 scripts/donator.py
 ```
 
-#### Web3.py Console
+#### Part 8: Web3.py Console
 http://populus.readthedocs.io/en/latest/dev_cycle.part-08.html
 
 ```
 solc --abi contracts/Donator.sol
+python3 cli/donator.py
 ```
