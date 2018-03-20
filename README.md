@@ -144,4 +144,11 @@ truffle console --network development
 ```
 git submodule add https://github.com/cryptoprimitive/CPTools.git cptools
 git submodule update
+
+python3
+```
+
+```
+from cptools import cptools
+cptools.printNumberedAccountList()
 ```
