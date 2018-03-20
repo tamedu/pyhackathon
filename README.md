@@ -55,8 +55,11 @@ populus deploy --chain tester Donator
 pip install eth-utils==0.7.* # since py.test required eth-utils 0.7.* version
 py.test
 
-populus deploy --chain tester ProjectOwnership
-py.test tests/test_project_ownership.py # to test selected test-cases
+# test selected test file
+py.test tests/test_project_ownership.py --disable-pytest-warnings
+
+# test selected test-case
+py.test tests/test_project_ownership.py::test_another_participant --disable-pytest-warnings
 ```
 
 More about solidity contract testing using populus at http://populus.readthedocs.io/en/latest/testing.html#web3

@@ -63,6 +63,12 @@ contract ProjectOwnership {
     }
 
     /* project related function */
+    function getParticipantOwnedTime(uint256 index)
+    public view
+    returns (uint16) {
+        return participantsOwnedTime[index];
+    }
+
     function join()
     public
     returns (uint) {
@@ -90,12 +96,14 @@ contract ProjectOwnership {
     }
 
     function getMyOwnershipPercent()
-    public
+    public view
     onlyParticipants()
-    returns (uint16) {
+    returns (uint16, uint256, uint16, uint16) {
         uint256 myId = uint256(getMyParticipantId());
-        uint16 percent = 100 * participantsOwnedTime[myId] / getTotalTime();
-        return percent;
+        uint16 myTime = participantsOwnedTime[myId];
+        uint16 totalTime = getTotalTime();
+        uint16 percent = 100 * participantsOwnedTime[myId] / totalTime;
+        return (percent, myId, myTime, totalTime);
     }
 
     /* private functions go here */
