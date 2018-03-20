@@ -118,3 +118,23 @@ http://populus.readthedocs.io/en/latest/dev_cycle.part-08.html
 solc --abi contracts/Donator.sol
 ./myenv/bin/python3 cli/donator.py
 ```
+
+### Truffle Development Cycle
+#### Setup
+https://hackernoon.com/ethereum-development-walkthrough-part-2-truffle-ganache-geth-and-mist-8d6320e12269
+```
+# Uninstall node https://gist.github.com/TonyMtz/d75101d9bdf764c890ef
+brew install node
+npm i npm to update
+npm install -g truffle
+# https://ethereum.stackexchange.com/questions/42840/contracts-will-not-compile-using-truffle-with-the-emit-keyword-included-in-fro/42849
+npm install -g solc@0.4.21
+
+npm install -g ganache-cli
+ganache-cli -p 7545
+
+touch migrations/2_deploy_contracts.js
+# Add contracts wanted to deploy
+truffle migrate --network development
+truffle console --network development
+```
