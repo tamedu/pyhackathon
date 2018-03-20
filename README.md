@@ -20,6 +20,7 @@ After that, the focus of the hackathon will be on making interaction easier and 
 ```
 brew install python3
 pip3 install --upgrade pip
+# https://gitter.im/ethereum/web3.py?at=5a9cb9be888332ee3afcf3bb
 pip install web3 --pre
 python3 cli/burnable_payment.py
 ```
@@ -40,7 +41,10 @@ https://populus.readthedocs.io/en/latest/dev_cycle.html
 ```
 brew install python3
 pip3 install --upgrade pip
-pip install web3 --pre
+
+pip install virtualenv
+virtualenv myenv
+./myenv/bin/pip install web3
 
 # Install following packages to complie https://github.com/ludbb/secp256k1-py
 # needed while installing populus
@@ -50,32 +54,33 @@ brew install pkg-config libffi autoconf automake libtool openssl
 sudo touch /usr/local/LICENSE
 sudo chown "$(whoami)" /usr/local/LICENSE
 
-pip install populus
+./myenv/bin/pip install populus
 # - OR -
 git clone https://github.com/ethereum/populus.git
 cd populus
 pip install -e . -r requirements-dev.txt
 
-populus init
+./myenv/bin/populus init
 
 # Install solidiy (solc) to compile solidity souce code
 # http://solidity.readthedocs.io/en/develop/installing-solidity.html
 brew tap ethereum/ethereum
 brew install solidity
-populus compile
+./myenv/bin/populus compile
 
 # Test deploy, no need to run before py.test
-populus deploy --chain tester Donator
+./myenv/bin/populus deploy --chain tester Donator
 
 # Unit-testing
-pip install eth-utils==0.7.* # py.test required eth-utils 0.7.* version
-py.test
+# py.test required eth-utils 0.7.* version
+./myenv/bin/pip install eth-utils==0.7.*
+./myenv/bin/pytest
 
 # test selected test file
-py.test tests/test_project_ownership.py --disable-pytest-warnings
+./myenv/bin/pytest tests/test_project_ownership.py --disable-pytest-warnings
 
 # test selected test-case
-py.test tests/test_project_ownership.py::test_another_participant --disable-pytest-warnings
+./myenv/bin/pytest tests/test_project_ownership.py::test_another_participant --disable-pytest-warnings
 ```
 
 More about solidity contract testing using populus at http://populus.readthedocs.io/en/latest/testing.html#web3
@@ -88,13 +93,13 @@ brew tap ethereum/ethereum
 brew install ethereum
 
 # init new chain and run
-populus chain new horton
+./myenv/bin/populus chain new horton
 chains/horton/./init_chain.sh
 chains/horton/./run_chain.sh
 
 # deploy contracts to the new chain (--no-wait-for-sync to use dummy Ether to run the transaction immediately)
-populus deploy --chain horton Donator --no-wait-for-sync
-populus deploy --chain horton Greeter --no-wait-for-sync
+./myenv/bin/populus deploy --chain horton Donator --no-wait-for-sync
+./myenv/bin/populus deploy --chain horton Greeter --no-wait-for-sync
 ```
 
 #### Part 7: Interacting With a Contract Instance
@@ -103,7 +108,7 @@ http://populus.readthedocs.io/en/latest/dev_cycle.part-07.html
 > Populus does not ask you for the address and the ABI of the projects’ contracts: it already has the address in the registrar file at registrar.json, and the ABI in build/contracts.json
 
 ```
-python3 scripts/donator.py
+./myenv/bin/python3 scripts/donator.py
 ```
 
 #### Part 8: Web3.py Console
@@ -111,5 +116,5 @@ http://populus.readthedocs.io/en/latest/dev_cycle.part-08.html
 
 ```
 solc --abi contracts/Donator.sol
-python3 cli/donator.py
+./myenv/bin/python3 cli/donator.py
 ```
