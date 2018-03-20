@@ -3,3 +3,4 @@ chains/
 __pycache__/
 registrar.json
 myenv/
+build/
