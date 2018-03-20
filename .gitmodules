@@ -1,0 +1,3 @@
+[submodule "cptools"]
+	path = cptools
+	url = https://github.com/cryptoprimitive/CPTools.git

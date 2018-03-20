@@ -20,9 +20,10 @@ After that, the focus of the hackathon will be on making interaction easier and 
 ```
 brew install python3
 pip3 install --upgrade pip
-# https://gitter.im/ethereum/web3.py?at=5a9cb9be888332ee3afcf3bb
 pip install web3 --pre
-python3 cli/burnable_payment.py
+# - OR -
+pip install web3==4.0.0b11 # https://gitter.im/ethereum/web3.py?at=5a98dc0a6f8b4b9946dc1a32
+python3 cli/cptools.py
 ```
 
 #### IMPORTANT !!!
@@ -137,4 +138,10 @@ touch migrations/2_deploy_contracts.js
 # Add contracts wanted to deploy
 truffle migrate --network development
 truffle console --network development
+```
+
+## Add CPTools
+```
+git submodule add https://github.com/cryptoprimitive/CPTools.git cptools
+git submodule update
 ```
