@@ -1,31 +1,14 @@
-# import pprint
-import json
-from web3 import Web3, HTTPProvider
-from web3.contract import ConciseContract
-
-import os
-import sys
+import os, sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, dir_path + '/../cptools')
-import cptools
+import init_web3
+import burnable_payment
 
-# use cptools.web3
-w3 = cptools.web3
-
-with open(dir_path + '/../build/contracts.json', 'r') as infile:
-    contracts_json = json.load(infile)
-BP_FACTORY_ABI = contracts_json["BurnablePaymentFactory"]["abi"]
-BP_ABI = contracts_json["BurnablePayment"]["abi"]
-
-bp_factory_contract = w3.eth.contract(abi = BP_FACTORY_ABI, address = cptools.BPFactoryAddress)
-
-def getBPCount():
-    bp_count = bp_factory_contract.call().getBPCount()
-    print("Number of BPs:", bp_count)
+BP_ABI = init_web3.loadABI("../build/contracts/BurnablePayment.json")
 
 def getBPNumber(x):
-    bp_address = bp_factory_contract.call().BPs(x)
-    bp_contract = w3.eth.contract(abi = BP_ABI, address = bp_address)
+    bp_address = BPFactory.call().BPs(x)
+    bp_contract = web3.eth.contract(abi = BP_ABI, address = bp_address)
     state = bp_contract.call().getFullState()
     bp = {
         "address": bp_address,
@@ -52,7 +35,7 @@ def getBPFromTo(f, t):
     return bps
 
 readme = """burnable_payment functions:
-getBPCount() - return number of bps
+burnable_payment.getBPCount() - return number of bps
 getBPNumber(x) - return bp number x
 getBPFromTo(f, t) - return bps from number f to number t
 
@@ -62,4 +45,4 @@ print()
 print(readme)
 print()
 
-getBPCount()
+burnable_payment.getBPCount()
