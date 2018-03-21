@@ -5,6 +5,7 @@
     "import_remappings": []
   },
   "chains": {
+
     "horton": {
       "chain": {
         "class": "populus.chain.ExternalChain"
@@ -25,6 +26,29 @@
           }
         }
       }
+    },
+
+    "ganache": {
+        "chain": {
+          "class": "populus.chain.ExternalChain"
+        },
+        "web3": {
+          "provider": {
+            "class": "web3.providers.rpc.HTTPProvider",
+          "settings": {
+            "endpoint_uri": "http://127.0.0.1:7545"
+          }
+         }
+        },
+        "contracts": {
+          "backends": {
+            "JSONFile": {"$ref": "contracts.backends.JSONFile"},
+            "ProjectContracts": {
+              "$ref": "contracts.backends.ProjectContracts"
+            }
+          }
+        }
     }
+
   }
 }

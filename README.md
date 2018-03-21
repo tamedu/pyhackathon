@@ -141,6 +141,7 @@ truffle console --network development
 ```
 
 ## Add CPTools
+https://github.com/cryptoprimitive/CPTools
 ```
 git submodule add https://github.com/cryptoprimitive/CPTools.git cptools
 git submodule update
@@ -148,7 +149,64 @@ git submodule update
 python3
 ```
 
-```
+```python
 from cptools import cptools
 cptools.printNumberedAccountList()
+cptools.printUpdates()
+```
+
+## Using Populus to deploy contracts to ganache-cli server
+```
+npm install -g ganache-cli
+ganache-cli -p 7545
+```
+
+Add following config to `"chains": {` in `project.json`
+
+```json
+"ganache": {
+    "chain": {
+      "class": "populus.chain.ExternalChain"
+    },
+    "web3": {
+      "provider": {
+        "class": "web3.providers.rpc.HTTPProvider",
+      "settings": {
+        "endpoint_uri": "http://127.0.0.1:7545"
+      }
+     }
+    },
+    "contracts": {
+      "backends": {
+        "JSONFile": {"$ref": "contracts.backends.JSONFile"},
+        "ProjectContracts": {
+          "$ref": "contracts.backends.ProjectContracts"
+        }
+      }
+    }
+}
+```
+
+```
+./myenv/bin/populus deploy --chain ganache Donator --no-wait-for-sync
+```
+
+
+## Using Parity Ethereum Client
+https://github.com/paritytech/parity
+
+```
+brew tap paritytech/paritytech
+brew install parity --latest # feature-rich beta release
+# - OR -
+brew install parity --stable
+
+parity --chain dev
+./myenv/bin/populus deploy --chain dev Donator --no-wait-for-sync
+
+# Additional tools
+brew install ethabi
+brew install ethkey
+brew install ethstore
+
 ```
