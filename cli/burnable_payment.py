@@ -3,16 +3,19 @@ import json
 from web3 import Web3, HTTPProvider
 from web3.contract import ConciseContract
 
+import os
+import sys
+dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.insert(0, dir_path + '/../cptools')
+import cptools
+
 # mainnet
 w3 = Web3(HTTPProvider('https://gladly-golden-parrot.quiknode.io/8959339e-f0ab-4403-876f-1aed9422a44f/xh9aJBYpYQHEhu6q8jQrkA==/'))
-ADDRESS = "0xA225EbE73347dd87492868332F9B746bEb8499bb"
 
 # pilot info
 print("blockNumber:", w3.eth.blockNumber)
 print("Accounts:", w3.eth.accounts)
 
-import os
-dir_path = os.path.dirname(os.path.realpath(__file__))
 with open(dir_path + '/../build/contracts.json', 'r') as infile:
     contracts_json = json.load(infile)
 BP_FACTORY_ABI = contracts_json["BurnablePaymentFactory"]["abi"]
@@ -20,7 +23,7 @@ BP_ABI = contracts_json["BurnablePayment"]["abi"]
 
 
 print("Loading BP contracts ...")
-bp_factory_contract = w3.eth.contract(abi = BP_FACTORY_ABI, address = ADDRESS)
+bp_factory_contract = w3.eth.contract(abi = BP_FACTORY_ABI, address = cptools.BPFactoryAddress)
 
 bp_count = bp_factory_contract.call().getBPCount()
 print("Number of BPs:", bp_count)
