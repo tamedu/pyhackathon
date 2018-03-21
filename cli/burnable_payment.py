@@ -1,4 +1,4 @@
-import pprint
+# import pprint
 import json
 from web3 import Web3, HTTPProvider
 from web3.contract import ConciseContract
@@ -9,37 +9,30 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, dir_path + '/../cptools')
 import cptools
 
-# mainnet
-w3 = Web3(HTTPProvider('https://gladly-golden-parrot.quiknode.io/8959339e-f0ab-4403-876f-1aed9422a44f/xh9aJBYpYQHEhu6q8jQrkA==/'))
-
-# pilot info
-print("blockNumber:", w3.eth.blockNumber)
-print("Accounts:", w3.eth.accounts)
+# use cptools.web3
+w3 = cptools.web3
 
 with open(dir_path + '/../build/contracts.json', 'r') as infile:
     contracts_json = json.load(infile)
 BP_FACTORY_ABI = contracts_json["BurnablePaymentFactory"]["abi"]
 BP_ABI = contracts_json["BurnablePayment"]["abi"]
 
-
-print("Loading BP contracts ...")
 bp_factory_contract = w3.eth.contract(abi = BP_FACTORY_ABI, address = cptools.BPFactoryAddress)
 
-bp_count = bp_factory_contract.call().getBPCount()
-print("Number of BPs:", bp_count)
+def getBPCount():
+    bp_count = bp_factory_contract.call().getBPCount()
+    print("Number of BPs:", bp_count)
 
-print("Loading 3 BPs ...")
-for x in range(0, 3):
+def getBPNumber(x):
     bp_address = bp_factory_contract.call().BPs(x)
-    print("\nBP #%d:" % (x))
     bp_contract = w3.eth.contract(abi = BP_ABI, address = bp_address)
     state = bp_contract.call().getFullState()
     bp = {
         "address": bp_address,
-        "payer": state[0],
-        "title": state[1],
-        "state": state[2],
-        "worker": state[3],
+        "state": state[0],
+        "payer": state[1],
+        "worker": state[2],
+        "title": state[3],
         "balance": state[4],
         "service_deposit": state[5],
         "amount_deposited": state[6],
@@ -48,4 +41,25 @@ for x in range(0, 3):
         "autorelease_interval": state[9],
         "autorelease_time": state[10]
     }
-    pprint.pprint(bp)
+    return bp
+
+def getBPFromTo(f, t):
+    r = range(f, t)
+    bps = []
+    print("Loading BPs in", r, "...")
+    for x in r:
+        bps.append(getBPNumber(x))
+    return bps
+
+readme = """burnable_payment functions:
+getBPCount() - return number of bps
+getBPNumber(x) - return bp number x
+getBPFromTo(f, t) - return bps from number f to number t
+
+"""
+
+print()
+print(readme)
+print()
+
+getBPCount()
