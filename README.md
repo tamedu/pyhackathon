@@ -4,6 +4,26 @@
 *   https://redd.it/83d3lz
 *   [CryptoPrimitive slack invite](https://cp-hackathon-invite.herokuapp.com/). Make sure to check out #weekend-hackathon!
 
+**Table of Content**
+<!-- TOC START min:2 max:4 link:true update:true -->
+  - [Purpose](#purpose)
+  - [Todos](#todos)
+  - [Python Ethereum Development](#python-ethereum-development)
+    - [web3py **beta** (4.x)](#web3py-beta-4x)
+    - [Populus Development Cycle](#populus-development-cycle)
+      - [Part 1-5: Create, compile and test Solidity contracts](#part-1-5-create-compile-and-test-solidity-contracts)
+      - [Part 6: Deploy contract to a local chain (via geth)](#part-6-deploy-contract-to-a-local-chain-via-geth)
+      - [Part 7: Interacting With a Contract Instance](#part-7-interacting-with-a-contract-instance)
+      - [Part 8: Web3.py Console](#part-8-web3py-console)
+    - [`populus` deploy contracts to external servers](#populus-deploy-contracts-to-external-servers)
+    - [Use CPTools](#use-cptools)
+  - [Truffle Development Cycle](#truffle-development-cycle)
+  - [Using Parity Ethereum Client](#using-parity-ethereum-client)
+
+<!-- TOC END -->
+
+
+
 ## Purpose
 Smart contracts should, in theory, make coordination easier.
 
@@ -32,19 +52,10 @@ bp.getBPCount()
 bp.getBP(0)
 ```
 
-#### IMPORTANT !!!
-cli/burnable_payment.py can be use with mainnet via quiknode a server. For the mainnet:
-> Don't put a lot of money on it. Paying for very simple interfaces, some game-like.
-> The current problem is you can only make calls (including withdrawing back to your own account)
-> if you 'unlock' your account--and then I think
-> anyone on the node has access to the funds/account until you 'lock' it again.
-> Logan currently looking at handling private keys locally, but it's not necessarily going to be easy.
-
-
 ### Populus Development Cycle
 https://populus.readthedocs.io/en/latest/dev_cycle.html
-### Part 1-5: Create, compile and test Solidity contracts
 
+#### Part 1-5: Create, compile and test Solidity contracts
 ```
 brew install python3
 pip3 install --upgrade pip
@@ -126,49 +137,14 @@ solc --abi contracts/Donator.sol
 ./myenv/bin/python3 cli/donator.py
 ```
 
-### Truffle Development Cycle
-#### Setup
-https://hackernoon.com/ethereum-development-walkthrough-part-2-truffle-ganache-geth-and-mist-8d6320e12269
-```
-# Uninstall node https://gist.github.com/TonyMtz/d75101d9bdf764c890ef
-brew install node
-npm i npm to update
-npm install -g truffle
-# https://ethereum.stackexchange.com/questions/42840/contracts-will-not-compile-using-truffle-with-the-emit-keyword-included-in-fro/42849
-npm install -g solc@0.4.21
-
-npm install -g ganache-cli
-ganache-cli -p 7545
-
-touch migrations/2_deploy_contracts.js
-# Add contracts wanted to deploy
-truffle migrate --network development
-truffle console --network development
-```
-
-## Add CPTools
-https://github.com/cryptoprimitive/CPTools
-```
-git submodule add https://github.com/cryptoprimitive/CPTools.git cptools
-git submodule update
-
-cd cptools
-python3
-```
-
-```python
-from cptools import cptools
-cptools.printNumberedAccountList()
-cptools.printUpdates()
-```
-
-## Using Populus to deploy contracts to ganache-cli server
+### `populus` deploy contracts to external servers
+`ganache-cli` for example
 ```
 npm install -g ganache-cli
 ganache-cli -p 7545
 ```
 
-Add following config to `"chains": {` in `project.json`
+Add following config to `"chains": { ... }` in `project.json`
 
 ```json
 "ganache": {
@@ -198,6 +174,40 @@ Add following config to `"chains": {` in `project.json`
 ./myenv/bin/populus deploy --chain ganache Donator --no-wait-for-sync
 ```
 
+### Use CPTools
+https://github.com/cryptoprimitive/CPTools
+```
+git submodule add https://github.com/cryptoprimitive/CPTools.git cptools
+git submodule update
+
+cd cptools
+python3
+```
+
+```python
+from cptools import cptools
+cptools.printNumberedAccountList()
+cptools.printUpdates()
+```
+
+
+## Truffle Development Cycle
+https://hackernoon.com/ethereum-development-walkthrough-part-2-truffle-ganache-geth-and-mist-8d6320e12269
+```
+brew install node
+npm i npm to update
+npm install -g truffle
+# https://ethereum.stackexchange.com/questions/42840/contracts-will-not-compile-using-truffle-with-the-emit-keyword-included-in-fro/42849
+npm install -g solc@0.4.21
+
+npm install -g ganache-cli
+ganache-cli -p 7545
+
+touch migrations/2_deploy_contracts.js
+# Add contracts wanted to deploy
+truffle migrate --network development
+truffle console --network development
+```
 
 ## Using Parity Ethereum Client
 https://github.com/paritytech/parity
