@@ -12,7 +12,7 @@ contract ProjectOwnership {
 
     uint16 public constant TIMMING_UNIT = 1000;
     address[] public participants;
-    uint16[] public participantsOwnedTime;
+    uint32[] public participantsOwnedTime;
     Todo[] public todos;
 
     modifier onlyParticipants() {
@@ -65,7 +65,7 @@ contract ProjectOwnership {
     /* project related function */
     function getParticipantOwnedTime(uint256 index)
     public view
-    returns (uint16) {
+    returns (uint32) {
         return participantsOwnedTime[index];
     }
 
@@ -86,9 +86,9 @@ contract ProjectOwnership {
 
     function getTotalTime()
     public view
-    returns (uint16) {
+    returns (uint32) {
         uint16 i = 0;
-        uint16 n = 0;
+        uint32 n = 0;
         for (i; i < participants.length; i++) {
             n = n + participantsOwnedTime[i];
         }
@@ -98,11 +98,12 @@ contract ProjectOwnership {
     function getMyOwnershipPercent()
     public view
     onlyParticipants()
-    returns (uint16, uint256, uint16, uint16) {
+    returns (uint32, uint256, uint32, uint32) {
         uint256 myId = uint256(getMyParticipantId());
-        uint16 myTime = participantsOwnedTime[myId];
-        uint16 totalTime = getTotalTime();
-        uint16 percent = 100 * participantsOwnedTime[myId] / totalTime;
+        uint32 myTime = participantsOwnedTime[myId];
+        uint32 totalTime = getTotalTime();
+        uint32 percent = 1000 * myTime / totalTime;
+        percent = ((percent + 99) / 100) * 10;
         return (percent, myId, myTime, totalTime);
     }
 
@@ -112,7 +113,7 @@ contract ProjectOwnership {
     returns (bool) {
         uint256 i = 0;
         uint256 id;
-        uint16 total = 0;
+        uint32 total = 0;
         Todo storage t = todos[todoIndex];
 
         for (i; i < t.approvedParticipants.length; i++) {
