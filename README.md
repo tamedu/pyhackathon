@@ -23,7 +23,13 @@ pip3 install --upgrade pip
 pip install web3 --pre
 # - OR -
 pip install web3==4.0.0b11 # https://gitter.im/ethereum/web3.py?at=5a98dc0a6f8b4b9946dc1a32
-python3 cli/bp.py
+python3
+```
+
+```python
+from cli import bp
+bp.getBPCount()
+bp.getBP(0)
 ```
 
 #### IMPORTANT !!!

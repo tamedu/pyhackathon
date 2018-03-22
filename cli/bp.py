@@ -1,15 +1,15 @@
 import os, sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, dir_path + '/../cptools')
-import init_web3
-import burnable_payment
+from init_web3 import loadABI
+from burnable_payment import *
 
-BP_ABI = init_web3.loadABI("../build/contracts/BurnablePayment.json")
+BP_ABI = loadABI("../build/contracts/BurnablePayment.json")["abi"]
 
-def getBPNumber(x):
-    bp_address = BPFactory.call().BPs(x)
+def getBP(x):
+    bp_address = BPFactory.functions.BPs(x).call()
     bp_contract = web3.eth.contract(abi = BP_ABI, address = bp_address)
-    state = bp_contract.call().getFullState()
+    state = bp_contract.functions.getFullState().call()
     bp = {
         "address": bp_address,
         "state": state[0],
@@ -26,18 +26,18 @@ def getBPNumber(x):
     }
     return bp
 
-def getBPFromTo(f, t):
+def getBPs(f, t):
     r = range(f, t)
     bps = []
     print("Loading BPs in", r, "...")
     for x in r:
-        bps.append(getBPNumber(x))
+        bps.append(getBP(x))
     return bps
 
 readme = """burnable_payment functions:
-burnable_payment.getBPCount() - return number of bps
-getBPNumber(x) - return bp number x
-getBPFromTo(f, t) - return bps from number f to number t
+getBPCount() - return number of bps
+getBP(x) - return bp number x
+getBPs(f, t) - return bps from number f to number t
 
 """
 
@@ -45,4 +45,5 @@ print()
 print(readme)
 print()
 
-burnable_payment.getBPCount()
+print("Number of BP contracts:", getBPCount())
+print("First contract: ", getBP(0))
