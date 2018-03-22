@@ -3,7 +3,7 @@ ONE_ETH_IN_WEI = 10**18
 def test_project_ownership(chain):
     project, _ = chain.provider.get_or_deploy_contract('ProjectOwnership')
 
-    assert project.call().version() == '0.0.1'
+    assert project.call().version() == '0.0.2'
     assert project.call().getParticipantsCount() == 0
     assert project.call().getTotalTime() == 0
 
@@ -16,8 +16,8 @@ def test_just_joined_participant(chain):
     chain.wait.for_receipt(set_txn_hash)
 
     assert project.call().getParticipantsCount() == 1
-    assert project.call().getTotalTime() == 1
-    assert project.call().getMyOwnershipPercent() == [100, 0, 1, 1]
+    assert project.call().getTotalTime() == 0
+    assert project.call().getMyOwnershipPercent() == [100, 0, 0, 0]
 
     title = "My first task"
     set_txn_hash = project.transact().createTodo(title);
@@ -34,7 +34,7 @@ def test_just_joined_participant(chain):
     set_txn_hash = project.transact().approveTodo(0);
     chain.wait.for_receipt(set_txn_hash)
 
-    assert project.call().getTotalTime() == 1001
+    assert project.call().getTotalTime() == 1
     t = project.call().getTodoInfo(0)
     assert t[0] == title
     assert t[1] == owner
@@ -66,15 +66,15 @@ def test_another_participant(chain):
     chain.wait.for_receipt(set_txn_hash)
     # should have two participants, 50% ownership for each
     assert project.call().getParticipantsCount() == 2
-    assert project.call().getTotalTime() == 2
-    assert project.call().getMyOwnershipPercent() == [50, 0, 1, 2]
-    assert project.call({'from': another_account}).getMyOwnershipPercent() == [50, 1, 1, 2]
+    assert project.call().getTotalTime() == 0
+    assert project.call().getMyOwnershipPercent() == [50, 0, 0, 0]
+    assert project.call({'from': another_account}).getMyOwnershipPercent() == [50, 1, 0, 0]
 
     # owner approve first todo
     set_txn_hash = project.transact().approveTodo(0);
     chain.wait.for_receipt(set_txn_hash)
 
-    assert project.call().getTotalTime() == 2
+    assert project.call().getTotalTime() == 0
     t = project.call().getTodoInfo(0)
     assert t[1] == owner
     assert t[2] == 1
@@ -88,9 +88,9 @@ def test_another_participant(chain):
     assert t[2] == 2
     assert t[3] == True
 
-    assert project.call().getTotalTime() == 1002
-    assert project.call().getParticipantOwnedTime(0) == 1001
-    assert project.call().getParticipantOwnedTime(1) == 1
+    assert project.call().getTotalTime() == 1
+    assert project.call().getParticipantOwnedTime(0) == 1
+    assert project.call().getParticipantOwnedTime(1) == 0
 
-    assert project.call({'from': owner}).getMyOwnershipPercent() == [100, 0, 1001, 1002]
-    assert project.call({'from': another_account}).getMyOwnershipPercent() == [0, 1, 1, 1002]
+    assert project.call({'from': owner}).getMyOwnershipPercent() == [100, 0, 1, 1]
+    assert project.call({'from': another_account}).getMyOwnershipPercent() == [0, 1, 0, 1]

@@ -10,7 +10,7 @@ contract ProjectOwnership {
         bool approved;
     }
 
-    uint16 public constant TIMMING_UNIT = 1000;
+    uint16 public constant TIMMING_UNIT = 1;
     address[] public participants;
     uint32[] public participantsOwnedTime;
     Todo[] public todos;
@@ -23,7 +23,7 @@ contract ProjectOwnership {
     function version()
     public
     returns (string) {
-        return "0.0.1";
+        return "0.0.2";
     }
 
     /* todo related functions */
@@ -74,7 +74,7 @@ contract ProjectOwnership {
     returns (uint) {
         require(!isParticipated());
         participants.push(msg.sender);
-        participantsOwnedTime.push(1);
+        participantsOwnedTime.push(0);
         return participants.length;
     }
 
@@ -102,8 +102,12 @@ contract ProjectOwnership {
         uint256 myId = uint256(getMyParticipantId());
         uint32 myTime = participantsOwnedTime[myId];
         uint32 totalTime = getTotalTime();
-        uint32 percent = 1000 * myTime / totalTime;
-        percent = ((percent + 99) / 100) * 10;
+        uint32 percent;
+        if (totalTime == 0) {
+            percent = 100 / uint32(participants.length);
+        } else {
+            percent = 100 * myTime / totalTime;
+        }
         return (percent, myId, myTime, totalTime);
     }
 
@@ -120,7 +124,15 @@ contract ProjectOwnership {
             id = uint256(getParticipantId(t.approvedParticipants[i], participants));
             total += participantsOwnedTime[id];
         }
-        bool approved = 2 * total > getTotalTime();
+
+        uint32 totalTime = getTotalTime();
+        bool approved;
+        if (totalTime == 0) {
+            approved = 2 * t.approvedParticipants.length > participants.length;
+        } else {
+            approved = 2 * total > totalTime;
+        }
+
         if (t.approved == false && approved == true) {
                 uint256 ownerId = uint256(getParticipantId(t.owner, participants));
                 t.approved = true;
