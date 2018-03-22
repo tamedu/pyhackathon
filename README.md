@@ -9,16 +9,17 @@
   - [Purpose](#purpose)
   - [Todos](#todos)
   - [Python Ethereum Development](#python-ethereum-development)
-    - [web3py **beta** (4.x)](#web3py-beta-4x)
+    - [`web3py` **beta** (4.x)](#web3py-beta-4x)
     - [Populus Development Cycle](#populus-development-cycle)
       - [Part 1-5: Create, compile and test Solidity contracts](#part-1-5-create-compile-and-test-solidity-contracts)
       - [Part 6: Deploy contract to a local chain (via geth)](#part-6-deploy-contract-to-a-local-chain-via-geth)
       - [Part 7: Interacting With a Contract Instance](#part-7-interacting-with-a-contract-instance)
       - [Part 8: Web3.py Console](#part-8-web3py-console)
     - [`populus` deploy contracts to external servers](#populus-deploy-contracts-to-external-servers)
-    - [Use CPTools](#use-cptools)
-  - [Truffle Development Cycle](#truffle-development-cycle)
-  - [Using Parity Ethereum Client](#using-parity-ethereum-client)
+    - [Use CPTools to speed up development](#use-cptools-to-speed-up-development)
+  - [Alternatives](#alternatives)
+    - [Truffle Development Cycle](#truffle-development-cycle)
+    - [Parity Ethereum Client](#parity-ethereum-client)
 
 <!-- TOC END -->
 
@@ -36,7 +37,7 @@ After that, the focus of the hackathon will be on making interaction easier and 
 
 ## Python Ethereum Development
 
-### web3py **beta** (4.x)
+### `web3py` **beta** (4.x)
 ```
 brew install python3
 pip3 install --upgrade pip
@@ -174,8 +175,8 @@ Add following config to `"chains": { ... }` in `project.json`
 ./myenv/bin/populus deploy --chain ganache Donator --no-wait-for-sync
 ```
 
-### Use CPTools
-https://github.com/cryptoprimitive/CPTools
+### Use CPTools to speed up development
+Check out https://github.com/cryptoprimitive/CPTools for details
 ```
 git submodule add https://github.com/cryptoprimitive/CPTools.git cptools
 git submodule update
@@ -190,8 +191,9 @@ cptools.printNumberedAccountList()
 cptools.printUpdates()
 ```
 
+## Alternatives
 
-## Truffle Development Cycle
+### Truffle Development Cycle
 https://hackernoon.com/ethereum-development-walkthrough-part-2-truffle-ganache-geth-and-mist-8d6320e12269
 ```
 brew install node
@@ -209,7 +211,7 @@ truffle migrate --network development
 truffle console --network development
 ```
 
-## Using Parity Ethereum Client
+### Parity Ethereum Client
 https://github.com/paritytech/parity
 
 ```
