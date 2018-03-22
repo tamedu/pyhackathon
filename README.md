@@ -19,7 +19,6 @@
     - [Use CPTools to speed up development](#use-cptools-to-speed-up-development)
   - [Alternatives](#alternatives)
     - [Truffle Development Cycle](#truffle-development-cycle)
-    - [Parity Ethereum Client](#parity-ethereum-client)
 
 <!-- TOC END -->
 
@@ -118,7 +117,6 @@ chains/horton/./run_chain.sh
 
 # deploy contracts to the new chain (--no-wait-for-sync to use dummy Ether to run the transaction immediately)
 ./myenv/bin/populus deploy --chain horton Donator --no-wait-for-sync
-./myenv/bin/populus deploy --chain horton Greeter --no-wait-for-sync
 ```
 
 #### Part 7: Interacting With a Contract Instance
@@ -205,27 +203,8 @@ npm install -g solc@0.4.21
 npm install -g ganache-cli
 ganache-cli -p 7545
 
-touch migrations/2_deploy_contracts.js
+open migrations/2_deploy_contracts.js
 # Add contracts wanted to deploy
 truffle migrate --network development
 truffle console --network development
-```
-
-### Parity Ethereum Client
-https://github.com/paritytech/parity
-
-```
-brew tap paritytech/paritytech
-brew install parity --latest # feature-rich beta release
-# - OR -
-brew install parity --stable
-
-parity --chain dev
-./myenv/bin/populus deploy --chain dev Donator --no-wait-for-sync
-
-# Additional tools
-brew install ethabi
-brew install ethkey
-brew install ethstore
-
 ```
