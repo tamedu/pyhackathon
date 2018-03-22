@@ -11,7 +11,7 @@ sudo: true
 before_install: # http://populus.readthedocs.io/en/latest/quickstart.html#system-dependencies
     - sudo add-apt-repository ppa:ethereum/ethereum -y
     - sudo apt-get update -q
-    - sudo apt-get install libssl-dev solc ethereum -y
+    - sudo apt-get install libssl-dev solc -y
 
 # os: osx # https://docs.travis-ci.com/user/reference/osx/
 # before_install: # https://docs.travis-ci.com/user/installing-dependencies/#Installing-Packages-on-OS-X
