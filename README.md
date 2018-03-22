@@ -152,6 +152,7 @@ https://github.com/cryptoprimitive/CPTools
 git submodule add https://github.com/cryptoprimitive/CPTools.git cptools
 git submodule update
 
+cd cptools
 python3
 ```
 
