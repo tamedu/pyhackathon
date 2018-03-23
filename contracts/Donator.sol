@@ -11,16 +11,16 @@ contract Donator {
     uint public donationsCount;
     uint public defaultUsdRate;
 
-    function Donator() {
+    function Donator()  public {
         defaultUsdRate = 350;
     }
 
     // fallback function
-    function () payable {
+    function () payable  public {
         donate(defaultUsdRate);
     }
 
-    modifier nonZeroValue() { if (!(msg.value > 0)) throw; _; }
+    modifier nonZeroValue() { if (!(msg.value > 0)) revert(); _; }
 
     function donate(uint usd_rate) public payable nonZeroValue {
         donationsTotal += msg.value;
