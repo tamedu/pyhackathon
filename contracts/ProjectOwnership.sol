@@ -134,12 +134,11 @@ contract ProjectOwnership {
         }
 
         if (t.approved == false && approved == true) {
-                uint256 ownerId = uint256(getParticipantId(t.owner, participants));
-                t.approved = true;
-                participantsOwnedTime[ownerId] += TIMMING_UNIT;
+            uint256 ownerId = uint256(getParticipantId(t.owner, participants));
+            t.approved = true;
+            participantsOwnedTime[ownerId] += TIMMING_UNIT;
         }
         return approved;
-        return t.approved;
     }
 
     function isParticipated() private view returns (bool) {
