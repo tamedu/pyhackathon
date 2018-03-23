@@ -42,6 +42,7 @@
     - data: function name (4 byte of keccak256())
 * Vulnerabilities https://youtu.be/r0cvQhBBw1w?t=566
 * Reentry https://youtu.be/r0cvQhBBw1w?t=718
+    - Fallback functions are triggered when the function signature does not match any of the available functions in a Solidity contract
     - the DAO `withDrawBalance() { ... msg.sender.call.value(userBalance[msg.sender])() ... }`
     - call withdrawBalance() from a malicious contract
     - withdrawBalance() calls the fallback function of the malicious contract
@@ -54,16 +55,20 @@
 ## Tutorials
 ### Manticore
 ```
-brew install python3
-pip3 install --upgrade pip
-pip install manticore
+wget https://bootstrap.pypa.io/get-pip.py
+sudo python get-pip.py
+sudo python -m pip install manticore
+# - OR -
 git clone https://github.com/trailofbits/manticore.git && cd manticore
-make
-#pip install --no-binary capstone .
+pip install --no-binary capstone .
+
 
 ```
 
-## List of Tools
+## Tools
+https://github.com/melonproject/oyente
+https://oyente.melon.fund
+
 ### trailofbits
 https://blog.trailofbits.com/2018/03/23/use-our-suite-of-ethereum-security-tools
 * https://github.com/trailofbits/manticore
