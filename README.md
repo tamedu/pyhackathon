@@ -1,4 +1,4 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/tamedu/pyhackathon.png?columns=all)](https://waffle.io/tamedu/pyhackathon?utm_source=badge) [![Build Status](https://travis-ci.org/tamedu/pyhackathon.svg?branch=master)](https://travis-ci.org/tamedu/pyhackathon)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/tamedu/pyhackathon.png?columns=all)](https://waffle.io/tamedu/pyhackathon?utm_source=badge) [![Build Status](https://travis-ci.org/tamedu/pyhackathon.svg?branch=master)](https://travis-ci.org/tamedu/pyhackathon) [![Maintainability](https://api.codeclimate.com/v1/badges/10be89011c77cc67d57f/maintainability)](https://codeclimate.com/github/tamedu/pyhackathon/maintainability) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1227d2a8f244401789917c764053c1ea)](https://www.codacy.com/app/tamedu/pyhackathon?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tamedu/pyhackathon&amp;utm_campaign=Badge_Grade)
 
 # CrytoPrimitive Python Weekend Hackathon
 *   https://redd.it/83d3lz
