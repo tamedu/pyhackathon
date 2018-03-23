@@ -190,41 +190,7 @@ cptools.printUpdates()
 ```
 
 ## Ethereum Virtual Machine Security
-
-https://blog.trailofbits.com/2017/12/22/videos-from-ethereum-focused-empire-hacking/
-### A brief history of smart contract security
-* Gas https://youtu.be/8LAThtT7euA?t=672
-* Reentry https://youtu.be/8LAThtT7euA?t=795
-* the DAO https://youtu.be/8LAThtT7euA?t=864
-* Parity multisign hack https://youtu.be/8LAThtT7euA?t=942
-* Secure reuse code (DappHub, OpenZeppelin) https://youtu.be/8LAThtT7euA?t=1057
-* Static Analysis Tool (Mythirl) https://youtu.be/8LAThtT7euA?t=1070
-### `trailofbits` security tools
-https://blog.trailofbits.com/2018/03/23/use-our-suite-of-ethereum-security-tools
-* https://github.com/trailofbits/manticore
-* https://github.com/trailofbits/echidna
-* https://github.com/trailofbits/ethersplay
-* https://github.com/trailofbits/not-so-smart-contracts
-### Solium Linter
-https://github.com/duaraghav8/Solium
-```
-npm install -g solium
-cd pyhackathon
-solium --init
-solium -f contracts/ProjectOwnership.sol
-solium -d contracts/
-solium -d contracts --fix # auto-fix codes
-
-#Atom Solium Linter https://github.com/travs/linter-solium
-apm install linter-solium
-npm i -g solium
-solium --init #in your project dir
-```
-### MAIAN: finding trace vulnerabilities in smart contracts
-https://github.com/MAIAN-tool/MAIAN
-```
-python3 maian.py -s ParityWalletLibrary.sol WalletLibrary -c 0
-```
+See [security](https://github.com/tamedu/pyhackathon/blob/master/security/README.md)
 
 ## Alternatives
 ### Truffle Development Cycle
