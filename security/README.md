@@ -53,6 +53,9 @@
     - Transaction https://youtu.be/r0cvQhBBw1w?t=1471
 
 ## Tutorials
+### Hacked Smart Contracts
+https://www.newline.co/courses/hacked-smart-contracts/
+*
 ### Manticore
 ```
 wget https://bootstrap.pypa.io/get-pip.py

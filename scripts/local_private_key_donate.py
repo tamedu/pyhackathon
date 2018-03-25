@@ -27,6 +27,7 @@ private_key = web3.eth.account.decrypt(encrypted_key, 'this-is-not-a-secure-pass
 # https://ethereum.stackexchange.com/questions/43565/how-to-generate-private-public-and-ethereum-addresses-using-web3-py
 from eth_account import Account
 account = Account.privateKeyToAccount(private_key)
+account_address = account.address
 # 0xf26f97d14c56260fa935d16e18984de6d3c8ae5b
 
 # ganache-cli --account="<privatekey>,balance" -i chainId -l gasLimit
@@ -37,7 +38,7 @@ print(binascii.hexlify(private_key).decode('ascii'))
 print(account)
 
 # http://web3py.readthedocs.io/en/latest/web3.eth.account.html#sign-a-contract-transaction
-nonce = web3.eth.getTransactionCount(account.address)
+nonce = web3.eth.getTransactionCount(account_address)
 txn = donator.functions.donate(
     7,
 ).buildTransaction({
