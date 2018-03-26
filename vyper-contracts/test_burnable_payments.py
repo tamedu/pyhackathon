@@ -13,7 +13,7 @@ def assert_tx_failed(ballot_tester, function_to_test, exception=tester.Transacti
     ballot_tester.s.revert(initial_state)
 
 
-class Testbps(unittest.TestCase):
+class TestBurnablePayments(unittest.TestCase):
     def setUp(self):
         # Initialize tester, contract and expose relevant objects
         self.t = tester
@@ -44,6 +44,11 @@ class Testbps(unittest.TestCase):
 
         self.c.recoverFunds(id)
         assert self.c.bps___balance(id) == 0
+
+    def test_commit(self):
+        id = self.c.createBurnablePayment("need help !!!", 100, 1000,  sender=self.t.k2, value=20)        
+        assert_tx_failed(self, lambda: self.c.commit(id, sender=self.t.k0, value=1))
+
 
 if __name__ == '__main__':
     unittest.main()
