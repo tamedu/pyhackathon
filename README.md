@@ -17,6 +17,7 @@
       - [Part 8: Web3.py Console](#part-8-web3py-console)
     - [`populus` deploy contracts to external servers](#populus-deploy-contracts-to-external-servers)
     - [Use CPTools to speed up development](#use-cptools-to-speed-up-development)
+  - [Ethereum Virtual Machine Security](#ethereum-virtual-machine-security)
   - [Alternatives](#alternatives)
     - [Truffle Development Cycle](#truffle-development-cycle)
 
@@ -210,3 +211,6 @@ open migrations/2_deploy_contracts.js
 truffle migrate --network development
 truffle console --network development
 ```
+
+### Viper Smart Contract Language
+https://www.reggie.io/blog/deploying-ethereum-viper/
