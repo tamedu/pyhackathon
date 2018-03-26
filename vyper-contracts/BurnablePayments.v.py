@@ -9,7 +9,7 @@ FundsBurned: event({ _burnablePaymentId: indexed(int128), _amount: wei_value })
 FundsReleased: event({ _burnablePaymentId: indexed(int128), _amount: wei_value })
 Closed: event({ _burnablePaymentId: indexed(int128) })
 Unclosed: event({ _burnablePaymentId: indexed(int128) })
-AutoreleaseDelayded: event({ _burnablePaymentId: indexed(int128) })
+AutoreleaseDelayed: event({ _burnablePaymentId: indexed(int128) })
 AutoreleaseTriggered: event({ _burnablePaymentId: indexed(int128) })
 
 # Data
@@ -66,7 +66,7 @@ def createBurnablePayment(_title: bytes <= 100, _commitThreshold: wei_value, _au
     return _id
 
 @private
-def isPayerOrWorker(_id: int128, _person: address) -> bool:
+def onlyPayerOrWorker(_id: int128, _person: address) -> bool:
     return self.burnablePayments[_id].payer == _person or self.burnablePayments[_id].worker == _person
 
 @public
@@ -126,3 +126,23 @@ def release(_id: int128, _amount: wei_value):
     assert self.burnablePayments[_id].state == self.State.Committed
     assert self.burnablePayments[_id].payer == msg.sender
     self.internalRelease(_id, _amount)
+
+@public
+def logStatement(_id: int128, _statement: bytes32):
+    assert self.onlyPayerOrWorker(_id, msg.sender)
+    log.Statement(_id, msg.sender, _statement)
+
+@public
+def delayAutorelease(_id: int128):
+    assert self.burnablePayments[_id].state == self.State.Committed
+    assert self.burnablePayments[_id].payer == msg.sender
+    self.burnablePayments[_id].autoreleaseTime = block.timestamp + self.burnablePayments[_id].autoreleaseInterval
+    log.AutoreleaseDelayed(_id)
+
+@public
+def triggerAutorelease(_id: int128):
+    assert self.burnablePayments[_id].state == self.State.Committed
+    assert self.burnablePayments[_id].worker == msg.sender
+    assert block.timestamp >= self.burnablePayments[_id].autoreleaseTime
+    self.internalRelease(_id, self.remainBalance(_id))
+    log.AutoreleaseTriggered(_id)
