@@ -47,7 +47,8 @@ def __init__():
 
 @public
 @payable
-def createBurnablePayment(_title: bytes <= 100, _commitThreshold: wei_value, _autoreleaseInterval: timedelta, ) -> int128:
+def createBurnablePayment(_title: bytes <= 100, _commitThreshold: wei_value,
+        _autoreleaseInterval: timedelta, ) -> int128:
     _id: int128
     _id = self.bpsCount
     self.bpsCount += 1
@@ -97,6 +98,15 @@ def closeIfBalanceIsZero(_id: int128):
         self.bps[_id].state = self.State.Closed
         log.Closed(_id)
 
+@private
+def internalRelease(_id: int128, _amount: wei_value):
+    assert self.bps[_id]._balance >= _amount
+    send(self.bps[_id].worker, _amount)
+    self.bps[_id].amountReleased += _amount
+    self.bps[_id]._balance -= _amount
+    log.FundsReleased(_id, _amount)
+    self.closeIfBalanceIsZero(_id)
+
 @public
 def burn(_id: int128, _amount: wei_value):
     assert self.bps[_id].state == self.State.Committed
@@ -106,15 +116,6 @@ def burn(_id: int128, _amount: wei_value):
     self.bps[_id].amountBurned += _amount
     self.bps[_id]._balance -= _amount
     log.FundsBurned(_id, _amount)
-    self.closeIfBalanceIsZero(_id)
-
-@private
-def internalRelease(_id: int128, _amount: wei_value):
-    assert self.bps[_id]._balance >= _amount
-    send(self.bps[_id].worker, _amount)
-    self.bps[_id].amountReleased += _amount
-    self.bps[_id]._balance -= _amount
-    log.FundsReleased(_id, _amount)
     self.closeIfBalanceIsZero(_id)
 
 @public
@@ -146,7 +147,7 @@ def recoverFunds(_id: int128):
     self.bps[_id]._balance = 0
     log.FundsRecovered(_id)
     self.closeIfBalanceIsZero(_id)
-    
+
 # Should be done via Statement contract
 # Simiilar to https://github.com/Bounties-Network/StandardBounties/blob/master/contracts/UserComments.sol
 # @public
