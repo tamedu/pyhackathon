@@ -17,9 +17,9 @@ burnablePayments: public({
     title: bytes <= 100,
     payer: address,
     worker: address,
-    recovered: bool,
     state: int128,
 
+    _balance: wei_value,
     amountDeposited: wei_value,
     amountBurned: wei_value,
     amountReleased: wei_value,
@@ -31,11 +31,12 @@ burnablePayments: public({
 }[int128])
 burnablePaymentsCount: public(int128)
 
-State: {
+State: public({
     Opened: int128,
     Committed: int128,
-    Closed: int128
-}
+    Closed: int128,
+    Recovered: int128
+})
 
 @public
 @payable
@@ -44,6 +45,7 @@ def __init__():
     self.State.Opened = 0
     self.State.Committed = 1
     self.State.Closed = 2
+    self.State.Recovered = 3
 
 @public
 @payable
@@ -53,6 +55,7 @@ def createBurnablePayment(_title: bytes <= 100, _commitThreshold: wei_value, _au
     self.burnablePaymentsCount += 1
     self.burnablePayments[_id].title = _title
     self.burnablePayments[_id].amountDeposited = msg.value
+    self.burnablePayments[_id]._balance = msg.value
     self.burnablePayments[_id].amountBurned = 0
     self.burnablePayments[_id].amountReleased = 0
     self.burnablePayments[_id].payer = msg.sender
@@ -75,10 +78,11 @@ def addFunds(_id: int128):
     assert self.burnablePayments[_id].payer == msg.sender
     assert msg.value > 0
     self.burnablePayments[_id].amountDeposited += msg.value
+    self.burnablePayments[_id]._balance += msg.value
+    log.FundsAdded(_id, msg.sender, msg.value, self.burnablePayments[_id].state)
     if self.burnablePayments[_id].state == self.State.Closed:
         self.burnablePayments[_id].state = self.State.Committed
         log.Unclosed(_id)
-    log.FundsAdded(_id, msg.sender, msg.value, self.burnablePayments[_id].state)
 
 @public
 @payable
@@ -90,15 +94,12 @@ def commit(_id: int128):
     self.burnablePayments[_id].autoreleaseTime = block.timestamp + self.burnablePayments[_id].autoreleaseInterval
     if msg.value > 0:
         self.burnablePayments[_id].amountDeposited += msg.value
+        self.burnablePayments[_id]._balance += msg.value
         log.FundsAdded(_id, msg.sender, msg.value, self.burnablePayments[_id].state)
 
-@public
-def remainBalance(_id: int128) -> wei_value:
-    return self.burnablePayments[_id].amountDeposited - self.burnablePayments[_id].amountBurned - self.burnablePayments[_id].amountReleased
-
 @private
-def closeIfRemainBalanceIsZero(_id: int128):
-    if self.remainBalance(_id) == 0:
+def closeIfBalanceIsZero(_id: int128):
+    if self.burnablePayments[_id]._balance == 0:
         self.burnablePayments[_id].state = self.State.Closed
         log.Closed(_id)
 
@@ -106,31 +107,27 @@ def closeIfRemainBalanceIsZero(_id: int128):
 def burn(_id: int128, _amount: wei_value):
     assert self.burnablePayments[_id].state == self.State.Committed
     assert self.burnablePayments[_id].payer == msg.sender
-    assert self.remainBalance(_id) >= _amount
-
+    assert self.burnablePayments[_id]._balance >= _amount
     send(0x0000000000000000000000000000000000000000, _amount)
     self.burnablePayments[_id].amountBurned += _amount
+    self.burnablePayments[_id]._balance -= _amount
     log.FundsBurned(_id, _amount)
-    self.closeIfRemainBalanceIsZero(_id)
+    self.closeIfBalanceIsZero(_id)
 
 @private
 def internalRelease(_id: int128, _amount: wei_value):
-    assert self.remainBalance(_id) >= _amount
+    assert self.burnablePayments[_id]._balance >= _amount
     send(self.burnablePayments[_id].worker, _amount)
     self.burnablePayments[_id].amountReleased += _amount
+    self.burnablePayments[_id]._balance -= _amount
     log.FundsReleased(_id, _amount)
-    self.closeIfRemainBalanceIsZero(_id)
+    self.closeIfBalanceIsZero(_id)
 
 @public
 def release(_id: int128, _amount: wei_value):
     assert self.burnablePayments[_id].state == self.State.Committed
     assert self.burnablePayments[_id].payer == msg.sender
     self.internalRelease(_id, _amount)
-
-@public
-def logStatement(_id: int128, _statement: bytes32):
-    assert self.onlyPayerOrWorker(_id, msg.sender)
-    log.Statement(_id, msg.sender, _statement)
 
 @public
 def delayAutorelease(_id: int128):
@@ -144,5 +141,20 @@ def triggerAutorelease(_id: int128):
     assert self.burnablePayments[_id].state == self.State.Committed
     assert self.burnablePayments[_id].worker == msg.sender
     assert block.timestamp >= self.burnablePayments[_id].autoreleaseTime
-    self.internalRelease(_id, self.remainBalance(_id))
+    self.internalRelease(_id, self.burnablePayments[_id]._balance)
     log.AutoreleaseTriggered(_id)
+
+@public
+def recoverFunds(_id: int128):
+    assert self.burnablePayments[_id].payer == msg.sender
+    assert self.burnablePayments[_id].state == self.State.Opened
+    send(msg.sender, self.burnablePayments[_id]._balance)
+    self.burnablePayments[_id]._balance = 0
+    self.burnablePayments[_id].state = self.State.Recovered
+    log.FundsRecovered(_id)
+
+# should be done via Statement contract
+# @public
+# def logStatement(_id: int128, _statement: bytes32):
+#     assert self.onlyPayerOrWorker(_id, msg.sender)
+#     log.Statement(_id, msg.sender, _statement)

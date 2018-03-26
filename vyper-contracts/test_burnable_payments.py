@@ -1,5 +1,4 @@
 import unittest
-import binascii
 
 from ethereum.tools import tester
 import ethereum.utils as utils
@@ -25,17 +24,24 @@ class TestBurnablePayments(unittest.TestCase):
 
     def test_createBurnablePayment(self):
         id = self.c.createBurnablePayment("need help !!!", 100, 1000,  sender=self.t.k1, value=2)
+        assert self.c.burnablePaymentsCount() == 1
         assert self.c.burnablePayments__title(id) == b'need help !!!'
-        assert self.c.burnablePayments__payer(id) == '0x'+binascii.hexlify(self.t.a1).decode('ascii')
+        assert utils.remove_0x_head(self.c.burnablePayments__payer(id)) == self.t.a1.hex()
         assert self.c.burnablePayments__worker(id) == '0x0000000000000000000000000000000000000000'
         assert self.c.burnablePayments__amountBurned(id) == 0
         assert self.c.burnablePayments__amountReleased(id) == 0
-        assert self.c.burnablePayments__recovered(id) == False
+        assert self.c.burnablePayments___balance(id) == 2
         assert self.c.burnablePayments__state(id) == 0
         assert self.c.burnablePayments__commitThreshold(id) == 100
         assert self.c.burnablePayments__autoreleaseInterval(id) == 1000
         assert self.c.burnablePayments__amountDeposited(id) == 2
         # assert self.c.burnablePayments__autoreleaseTime(id) ==
+
+        self.c.addFunds(id, sender=self.t.k1, value=8)
+        assert self.c.burnablePayments___balance(id) == 10
+
+        self.c.recoverFunds(id)
+        # assert self.c.burnablePayments___balance(id) == 0
 
 if __name__ == '__main__':
     unittest.main()
