@@ -66,10 +66,6 @@ def createBurnablePayment(_title: bytes <= 100, _commitThreshold: wei_value, _au
         log.FundsAdded(_id, msg.sender, msg.value, self.bps[_id].state)
     return _id
 
-@private
-def onlyPayerOrWorker(_id: int128, _person: address) -> bool:
-    return self.bps[_id].payer == _person or self.bps[_id].worker == _person
-
 @public
 @payable
 def addFunds(_id: int128):
@@ -150,11 +146,10 @@ def recoverFunds(_id: int128):
     self.bps[_id]._balance = 0
     log.FundsRecovered(_id)
     self.closeIfBalanceIsZero(_id)
-
-
+    
 # Should be done via Statement contract
 # Simiilar to https://github.com/Bounties-Network/StandardBounties/blob/master/contracts/UserComments.sol
 # @public
 # def logStatement(_id: int128, _statement: bytes32):
-#     assert self.onlyPayerOrWorker(_id, msg.sender)
+#     assert self.bps[_id].payer == msg.sender or self.bps[_id].worker == msg.sender
 #     log.Statement(_id, msg.sender, _statement)
