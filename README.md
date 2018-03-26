@@ -214,3 +214,4 @@ truffle console --network development
 
 ### Viper Smart Contract Language
 https://www.reggie.io/blog/deploying-ethereum-viper/
+https://github.com/ethereum/pyethereum/wiki/Using-pyethereum.tester
