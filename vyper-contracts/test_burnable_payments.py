@@ -46,8 +46,32 @@ class TestBurnablePayments(unittest.TestCase):
         assert self.c.bps___balance(id) == 0
 
     def test_commit(self):
-        id = self.c.createBurnablePayment("need help !!!", 100, 1000,  sender=self.t.k2, value=20)        
+        id = self.c.createBurnablePayment("need help !!!", 100, 1000,  sender=self.t.k2, value=20)
         assert_tx_failed(self, lambda: self.c.commit(id, sender=self.t.k0, value=1))
+        self.c.commit(id, sender=self.t.k0, value=100)
+        assert utils.remove_0x_head(self.c.bps__worker(id)) == self.t.a0.hex()
+        assert self.c.bps__state(id) == self.c.State__Committed()
+        assert self.c.bps___balance(id) == 120
+        self.c.burn(id, 20, sender=self.t.k2)
+        assert self.c.bps___balance(id) == 100
+        assert self.c.bps__amountBurned(id) == 20
+        self.c.release(id, 50, sender=self.t.k2)
+        assert self.c.bps___balance(id) == 50
+        assert self.c.bps__amountReleased(id) == 50
+
+
+        assert_tx_failed(self, lambda: self.c.triggerAutorelease(id, sender=self.t.k0))
+        assert_tx_failed(self, lambda: self.c.burn(id, 45, sender=self.t.k1))
+        assert_tx_failed(self, lambda: self.c.release(id, 63, sender=self.t.k1))
+
+    def test_triggerAutorelease(self):
+        id = self.c.createBurnablePayment("need help !!!", 100, 0,  sender=self.t.k2, value=20)
+        self.c.commit(id, sender=self.t.k0, value=200)
+        assert self.c.bps___balance(id) == 220
+        assert self.c.bps__amountReleased(id) == 0
+        self.c.triggerAutorelease(id, sender=self.t.k0)
+        assert self.c.bps___balance(id) == 0
+        assert self.c.bps__amountReleased(id) == 220
 
 
 if __name__ == '__main__':
