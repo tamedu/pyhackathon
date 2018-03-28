@@ -1,14 +1,15 @@
 import os, sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, dir_path + '/../cptools')
-from init_web3 import loadABI
-
+from utils import loadABI
 from web3 import Web3, IPCProvider, HTTPProvider
 
 # web3 = Web3(IPCProvider(ipc_path="chains/horton/chain_data/geth.ipc"))
 # ADDRESS = "0x0c1afbd0e19a225202e80d07c38632105fb0718f"
-
-# ./myenv/bin/populus deploy --chain ganache Donator --no-wait-for-sync
+'''
+ganache-cli --account="0x5ec5f57652661e8081b3ada11e4a77281bfd83375f3a3fb9c14331a6d2b1cefd,999988880000000000000" -i 1 -l 10000000000
+./myenv/bin/populus deploy --chain ganache Donator --no-wait-for-sync
+'''
 web3 = Web3(HTTPProvider("http://127.0.0.1:8545"))
 ADDRESS = "0x0C1afBd0E19a225202E80d07c38632105FB0718f"
 
