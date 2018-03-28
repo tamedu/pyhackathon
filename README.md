@@ -213,5 +213,6 @@ truffle console --network development
 ```
 
 ### Viper Smart Contract Language
+https://vyper.readthedocs.io/en/latest/vyper-by-example.html
 https://www.reggie.io/blog/deploying-ethereum-viper/
 https://github.com/ethereum/pyethereum/wiki/Using-pyethereum.tester
