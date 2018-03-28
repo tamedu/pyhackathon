@@ -3,26 +3,13 @@
 # https://github.com/andrewcooke/simple-crypt
 # https://github.com/ranaroussi/pywallet BIP32 (HD) wallet creation for BTC, BTG, BCH, ETH, LTC, DASH and DOGE
 # https://github.com/michailbrynard/ethereum-bip44-python
+# https://github.com/vergl4s/ethereum-mnemonic-utils # Finally it works! :D
 
-# pip3 install pywallet
-from pywallet import wallet
-seed = "guess tiny intact poet process segment pelican bright assume avocado view lazy"
-seed = "traffic happy world clog clump cattle great toy game absurd alarm auction"
-w = wallet.create_wallet(network="ETH", seed=seed, children=1)
-private_key = w['xprivate_key']
-private_key
-
-# pip3 install web3==4.0.0b11
-from eth_account import Account
-account = Account.privateKeyToAccount(private_key)
-account_address = account.address
-
-
-# https://github.com/vergl4s/ethereum-mnemonic-utils
 # pip3 install base58 ecdsa
 from mnemonic_utils import mnemonic_to_private_key
 private_key = mnemonic_to_private_key("legal winner thank year wave sausage worth useful legal winner thank yellow")
 
+# pip3 install web3==4.0.0b13
 import binascii
 from web3.auto import w3
 account = w3.eth.account.privateKeyToAccount(private_key)
@@ -33,12 +20,6 @@ account = w3.eth.account.privateKeyToAccount(private_key)
 
 from getpass import getpass
 key = getpass("Enter your password: ")
-
-# pip3 install cryptography
-from cryptography.fernet import Fernet
-cipher_suite = Fernet(key)
-cipher_text = cipher_suite.encrypt(b"A really secret message. Not for prying eyes.")
-plain_text = cipher_suite.decrypt(cipher_text)
 '''
 
 import os, sys
@@ -68,17 +49,21 @@ seed = "legal winner thank year wave sausage worth useful legal winner thank yel
 # ganache-cli --account="<privatekey>,balance" -i chainId -l gasLimit
 # ganache-cli --account="0xb1b314d4fedc41fa409d26eb15e4ea1b213a3e7951dd16d8701a35c783a4a594,999988880000000000000" -i 1 -l 10000000000
 
-# https://ethereum.stackexchange.com/questions/43565/how-to-generate-private-public-and-ethereum-addresses-using-web3-py
+from Crypto.Cipher import XOR
+import base64
+
+def encrypt(key, plaintext):
+  cipher = XOR.new(key)
+  return base64.b64encode(cipher.encrypt(plaintext))
+
+def decrypt(key, ciphertext):
+  cipher = XOR.new(key)
+  return cipher.decrypt(base64.b64decode(ciphertext))
+
+password = 'la la la'
+ciphertext = encrypt(password, mnemonic_to_private_key(seed))
+decrypt(password, ciphertext)
+
 from eth_account import Account
-local_account = Account.privateKeyToAccount(mnemonic_to_private_key(seed))
-
-# Donate
-effective_eth_usd_rate = 5
-transaction = {'value': 5000, 'from': local_account.address}
-tx_hash = donator.transact(transaction).donate(effective_eth_usd_rate)
-print ("Thank you for the donation! Tx hash {tx}".format(tx=tx_hash))
-
-
-print(donator)
-print(donator.functions.donationsCount().call())
-print(donator.functions.donationsTotal().call())
+local_account = Account.privateKeyToAccount(decrypt(password, ciphertext))
+print(local_account.address)
