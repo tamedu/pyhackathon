@@ -1,8 +1,7 @@
-# Events to logged
+# Events to log
 # Up to 3 parameters can be indexed https://media.consensys.net/technical-introduction-to-events-and-logs-in-ethereum-a074d65dd61e
 Created: event({ _id: int128, _payer: indexed(address) })
 FundsAdded: event({ _burnablePaymentId: indexed(int128), _payer: indexed(address),  _amount: wei_value, _state: int128 })
-Statement: event({ _burnablePaymentId: indexed(int128), _creator: indexed(address), _statement: bytes32 })
 FundsRecovered: event({ _burnablePaymentId: indexed(int128) })
 Committed: event({ _burnablePaymentId: indexed(int128), _worker: indexed(address) })
 FundsBurned: event({ _burnablePaymentId: indexed(int128), _amount: wei_value })
@@ -12,7 +11,7 @@ Unclosed: event({ _burnablePaymentId: indexed(int128) })
 AutoreleaseDelayed: event({ _burnablePaymentId: indexed(int128) })
 AutoreleaseTriggered: event({ _burnablePaymentId: indexed(int128) })
 
-# Data
+# ***** Data *****
 bps: public({
     title: bytes <= 100,
     payer: address,
@@ -37,6 +36,8 @@ State: public({
     Closed: int128,
 })
 
+# ***** Constructor *****
+
 @public
 @payable
 def __init__():
@@ -44,6 +45,25 @@ def __init__():
     self.State.Opened = 0
     self.State.Committed = 1
     self.State.Closed = 2
+
+# ***** Helpers *****
+
+@private
+def closeIfBalanceIsZero(_id: int128):
+    if self.bps[_id]._balance == 0:
+        self.bps[_id].state = self.State.Closed
+        log.Closed(_id)
+
+@private
+def internalRelease(_id: int128, _amount: wei_value):
+    assert self.bps[_id]._balance >= _amount
+    send(self.bps[_id].worker, _amount)
+    self.bps[_id].amountReleased += _amount
+    self.bps[_id]._balance -= _amount
+    log.FundsReleased(_id, _amount)
+    self.closeIfBalanceIsZero(_id)
+
+# ***** Public *****
 
 @public
 @payable
@@ -92,21 +112,6 @@ def commit(_id: int128):
         self.bps[_id]._balance += msg.value
         log.FundsAdded(_id, msg.sender, msg.value, self.bps[_id].state)
 
-@private
-def closeIfBalanceIsZero(_id: int128):
-    if self.bps[_id]._balance == 0:
-        self.bps[_id].state = self.State.Closed
-        log.Closed(_id)
-
-@private
-def internalRelease(_id: int128, _amount: wei_value):
-    assert self.bps[_id]._balance >= _amount
-    send(self.bps[_id].worker, _amount)
-    self.bps[_id].amountReleased += _amount
-    self.bps[_id]._balance -= _amount
-    log.FundsReleased(_id, _amount)
-    self.closeIfBalanceIsZero(_id)
-
 @public
 def burn(_id: int128, _amount: wei_value):
     assert self.bps[_id].state == self.State.Committed
@@ -150,6 +155,7 @@ def recoverFunds(_id: int128):
 
 # Should be done via Statement contract
 # Simiilar to https://github.com/Bounties-Network/StandardBounties/blob/master/contracts/UserComments.sol
+# Statement: event({ _burnablePaymentId: indexed(int128), _creator: indexed(address), _statement: bytes32 })
 # @public
 # def logStatement(_id: int128, _statement: bytes32):
 #     assert self.bps[_id].payer == msg.sender or self.bps[_id].worker == msg.sender
