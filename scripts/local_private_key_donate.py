@@ -19,7 +19,7 @@ print(donator)
 print(donator.functions.donationsCount().call())
 print(donator.functions.donationsTotal().call())
 
-with open('../chains/horton/chain_data/keystore/UTC--2018-03-20T08-11-38.682616898Z--f26f97d14c56260fa935d16e18984de6d3c8ae5b') as keyfile:
+with open('./chains/horton/chain_data/keystore/UTC--2018-03-20T08-11-38.682616898Z--f26f97d14c56260fa935d16e18984de6d3c8ae5b') as keyfile:
     keyfile_json = keyfile.read()
 private_key = web3.eth.account.decrypt(keyfile_json, 'this-is-not-a-secure-password')
 import binascii
