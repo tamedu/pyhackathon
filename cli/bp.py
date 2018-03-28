@@ -1,9 +1,8 @@
 import os, sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, dir_path + '/../cptools')
-from init_web3 import loadABI
+from utils import loadABI
 from burnable_payment import *
-from cptools import *
 
 BP_ABI = loadABI("../build/contracts/BurnablePayment.json")
 
