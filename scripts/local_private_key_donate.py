@@ -1,38 +1,3 @@
-'''
-# https://github.com/pyca/cryptography
-# https://github.com/andrewcooke/simple-crypt
-# https://github.com/ranaroussi/pywallet BIP32 (HD) wallet creation for BTC, BTG, BCH, ETH, LTC, DASH and DOGE
-# https://github.com/michailbrynard/ethereum-bip44-python
-
-# pip3 install pywallet
-from pywallet import wallet
-seed = "guess tiny intact poet process segment pelican bright assume avocado view lazy"
-seed = "traffic happy world clog clump cattle great toy game absurd alarm auction"
-w = wallet.create_wallet(network="ETH", seed=seed, children=1)
-private_key = w['xprivate_key']
-private_key
-
-# pip3 install web3==4.0.0b11
-from eth_account import Account
-account = Account.privateKeyToAccount(private_key)
-account_address = account.address
-
-
-acct_pub_key = acct_priv_key.public_key
-print('Account Master Public Key (Hex): ' + acct_pub_key.to_hex())
-print('XPUB format: ' + acct_pub_key.to_b58check())
-
-
-from getpass import getpass
-key = getpass("Enter your password: ")
-
-# pip3 install cryptography
-from cryptography.fernet import Fernet
-cipher_suite = Fernet(key)
-cipher_text = cipher_suite.encrypt(b"A really secret message. Not for prying eyes.")
-plain_text = cipher_suite.decrypt(cipher_text)
-'''
-
 import os, sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, dir_path + '/../cptools')
@@ -65,6 +30,7 @@ print(binascii.hexlify(private_key).decode('ascii'))
 from eth_account import Account
 account = Account.privateKeyToAccount(private_key)
 account_address = account.address
+print(account_address)
 # 0xf26f97d14c56260fa935d16e18984de6d3c8ae5b
 
 # ganache-cli --account="<privatekey>,balance" -i chainId -l gasLimit
